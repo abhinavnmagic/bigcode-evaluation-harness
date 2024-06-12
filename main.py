@@ -272,7 +272,7 @@ def main():
         model_kwargs = {
             "revision": args.revision,
             "trust_remote_code": args.trust_remote_code,
-            "use_auth_token": args.use_auth_token,
+            "token": args.use_auth_token,
         }
         if args.load_in_8bit:
             print("Loading model in 8bit")
@@ -281,6 +281,8 @@ def main():
         elif args.load_in_4bit:
             print("Loading model in 4bit")
             model_kwargs["load_in_4bit"] = args.load_in_4bit
+            model_kwargs["torch_dtype"] = torch.float16
+            model_kwargs["bnb_4bit_compute_dtype"] = torch.float16            
             model_kwargs["device_map"] = {"": accelerator.process_index}
         else:
             print(f"Loading model in {args.precision}")
@@ -364,7 +366,7 @@ def main():
                 args.model,
                 revision=args.revision,
                 trust_remote_code=args.trust_remote_code,
-                use_auth_token=args.use_auth_token,
+                token=args.use_auth_token,
                 padding_side="left",  
             )
         else:
@@ -373,7 +375,7 @@ def main():
                 args.model,
                 revision=args.revision,
                 trust_remote_code=args.trust_remote_code,
-                use_auth_token=args.use_auth_token,
+                token=args.use_auth_token,
                 truncation_side="left",
                 padding_side="right",  
             )

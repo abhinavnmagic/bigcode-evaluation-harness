@@ -382,6 +382,49 @@ accelerate launch  main.py \
   --allow_code_execution
 ```
 
+### StudentEval
+
+[StudentEval](https://huggingface.co/datasets/wellesley-easel/StudentEval) is a 
+dataset of 1,749 prompts for 48 problems, authored by 80 students who have only
+completed a one-semester Python programming class. Unlike many other benchmarks, 
+it has multiple prompts per problem and multiple attempts by the same
+participant. Each problem is accompanied by a set of instructor-written test 
+cases.
+
+```python
+accelerate launch main.py \
+  --model <MODEL_NAME> \
+  --max_length_generation 512 \
+  --tasks studenteval \
+  --temperature 0.2 \
+  --top_p 0.95 \
+  --do_sample True \
+  --n_samples 20 \
+  --batch_size 20 \
+  --allow_code_execution
+```
+
+## Mercury
+[Mercury](https://huggingface.co/datasets/Elfsong/Mercury) is a Code-LLM computational efficiency benchmark. It comprises 1,889 Python programming tasks with three difficulty stratification, which is divided into two datasets for model evaluation and fine-tuning separately. For each evaluation task, we assign a test case generator to remedy the shortfall of test case coverage. More details can be found in the [paper](https://arxiv.org/abs/2402.07844).
+
+```shell
+# Install these libraries before runing Mercury
+pip install lctk sortedcontainers
+```
+
+```python
+accelerate launch main.py  \
+    --model <MODEL_NAME>   \
+    --load_in_4bit   \
+    --max_length_generation 2048   \
+    --tasks mercury    \
+    --n_samples 5  \
+    --temperature 0.2  \
+    --batch_size 5   \
+    --allow_code_execution  \
+    --save_generations  \
+    --metric_output_path <MODEL_NAME>.json
+```
 
 ## Code generation benchmarks without unit tests
 
