@@ -19,7 +19,7 @@ from bigcode_eval.evaluator import Evaluator
 from bigcode_eval.tasks import ALL_TASKS
 
 try:
-    from sparseml.transformers.utils.sparse_model import SparseAutoModel
+    from sparseml.transformers import SparseAutoModelForCausalLM
 except:
     print("SparseML not found. proceeding without it")
 
@@ -310,13 +310,11 @@ def main():
                 **model_kwargs,
             )
         elif args.modeltype == "nm":
-            recipe_file = os.path.join(args.model, 'recipe.yaml')
-            model = SparseAutoModel.text_generation_from_pretrained(
-                model_name_or_path=args.model,
-                recipe=recipe_file,
+            model = SparseAutoModelForCausalLM.from_pretrained(
+                pretrained_model_name_or_path=args.model,
                 **model_kwargs,
             )
-            #model.to(model.device)
+            model.to(model.device)
         elif args.modeltype == "gptq":
             from auto_gptq import AutoGPTQForCausalLM
             model = AutoGPTQForCausalLM.from_quantized(args.model, device_map='auto')
